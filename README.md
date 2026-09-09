@@ -112,7 +112,7 @@ The following are intentionally outside the scope of this prototype:
 ## Demo Evidence
 
 ### Prototype overview screenshot
-![alt text](image-2.png)
+![alt text](assets/image-2.png)
 
 ### 1. Multi-turn Inventory Search
 
