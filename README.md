@@ -111,6 +111,9 @@ The following are intentionally outside the scope of this prototype:
 
 ## Demo Evidence
 
+### Prototype overview screenshot
+![alt text](image-2.png)
+
 ### 1. Multi-turn Inventory Search
 
 The assistant maintains conversation context while refining an inventory search.
@@ -145,6 +148,9 @@ Assistant: [Recalls Alex's Toyota preference and 100,000 AED budget]
 ```
 
 **Screenshot:** Preference recall in a new session.
+![alt text](image-3.png)
+![alt text](image-4.png)
+![alt text](image-5.png)
 
 ## Additional Functionality
 
