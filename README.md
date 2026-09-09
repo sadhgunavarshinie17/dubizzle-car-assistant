@@ -30,7 +30,7 @@ dubizzle-car-assistant/
 │   ├── booking.py
 │   └── leads.py
 ├── assets/
-│   └── logo.png
+│   └── image.png
 ├── app.py
 ├── main.py
 ├── pyproject.toml
