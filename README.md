@@ -127,6 +127,8 @@ Assistant: [Recalls the relevant vehicle]
 ```
 
 **Screenshot:** Successful multi-turn inventory conversation.
+![alt text](image.png)
+![alt text](image-1.png)
 
 ### 2. Long-term Memory
 
