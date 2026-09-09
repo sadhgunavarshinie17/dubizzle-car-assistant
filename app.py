@@ -158,7 +158,7 @@ if "messages" not in st.session_state:
 # --------------------------------------------------
 
 st.image(
-    "assets/image.png",
+    "assets/logo.png",
     width=180
 )
 

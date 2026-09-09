@@ -130,8 +130,8 @@ Assistant: [Recalls the relevant vehicle]
 ```
 
 **Screenshot:** Successful multi-turn inventory conversation.
-![alt text](image.png)
-![alt text](image-1.png)
+![alt text](assets/image.png)
+![alt text](assets/image-1.png)
 
 ### 2. Long-term Memory
 
@@ -148,9 +148,9 @@ Assistant: [Recalls Alex's Toyota preference and 100,000 AED budget]
 ```
 
 **Screenshot:** Preference recall in a new session.
-![alt text](image-3.png)
-![alt text](image-4.png)
-![alt text](image-5.png)
+![alt text](assets/image-3.png)
+![alt text](assets/image-4.png)
+![alt text](assets/image-5.png)
 
 ## Additional Functionality
 
