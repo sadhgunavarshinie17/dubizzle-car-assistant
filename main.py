@@ -2,7 +2,7 @@ import os
 import json
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from google import genai
 
@@ -288,6 +288,8 @@ def chat(request: ChatRequest):
     history = get_recent_messages(request.user_id)
     preferences = get_preferences(request.user_id)
 
+    cars = []
+
     conversation = "\n".join(
         f"{role}: {message}"
         for role, message in history
@@ -303,12 +305,26 @@ def chat(request: ChatRequest):
             f"{conversation}"
         )
 
-    interaction = client.interactions.create(
-        model="gemini-3.6-flash",
-        input=conversation,
-        system_instruction=SYSTEM_PROMPT,
-        tools=[search_inventory_tool, save_preferences_tool, book_viewing_tool, save_lead_tool]
-    )
+    try:
+        interaction = client.interactions.create(
+            model="gemini-3.6-flash",
+            input=conversation,
+            system_instruction=SYSTEM_PROMPT,
+            tools=[search_inventory_tool, save_preferences_tool, book_viewing_tool, save_lead_tool]
+        )
+
+    except Exception as error:
+        if "429" in str(error):
+            raise HTTPException(
+                status_code=429,
+                detail="Gemini API quota exceeded. Please try again shortly."
+            )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Something went wrong while contacting the AI assistant."
+        )
+    
 
     for step in interaction.steps:
         if step.type == "function_call":
@@ -324,7 +340,7 @@ def chat(request: ChatRequest):
                     top_k=arguments.get("top_k", 5)
                 )
 
-                result = results[
+                cars = results[
                     [
                         "Listing_ID",
                         "year",
@@ -334,7 +350,9 @@ def chat(request: ChatRequest):
                         "title",
                         "description"
                     ]
-                ].to_dict(orient="records")
+                ].fillna("").to_dict(orient="records")
+
+                result = cars
 
             elif step.name == "save_preferences":
                 save_preferences(
@@ -348,6 +366,16 @@ def chat(request: ChatRequest):
                 )
 
                 result = {"status": "Preferences saved successfully."}
+
+            elif step.name == "book_viewing":
+                result = book_viewing(
+                    user_id=request.user_id,
+                    listing_id=arguments.get("listing_id"),
+                    booking_date=arguments.get("booking_date"),
+                    booking_time=arguments.get("booking_time"),
+                    name=arguments.get("name"),
+                    contact=arguments.get("contact")
+                )
 
             elif step.name == "save_lead":
                 result = save_lead(
@@ -381,15 +409,10 @@ def chat(request: ChatRequest):
             )
 
             save_message(request.user_id, "user", request.message)
-            save_message(
-                request.user_id,
-                "assistant",
-                final_interaction.output_text
-            )
-
-            return {"response": final_interaction.output_text}
+            save_message(request.user_id, "assistant", final_interaction.output_text)
+            return {"response": final_interaction.output_text, "cars": cars}
 
     save_message(request.user_id, "user", request.message)
     save_message(request.user_id, "assistant", interaction.output_text)
 
-    return {"response": interaction.output_text}
+    return {"response": interaction.output_text, "cars": cars}

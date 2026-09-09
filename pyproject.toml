@@ -1,12 +1,19 @@
 [project]
 name = "dubizzle-car-assistant"
 version = "0.1.0"
-requires-python = ">=3.12"
+description = "AI-powered car shopping assistant for dubizzle"
+requires-python = ">=3.10"
 
 dependencies = [
+    "fastapi",
+    "uvicorn",
+    "streamlit",
+    "requests",
     "pandas",
     "openpyxl",
-    "sentence-transformers",
     "numpy",
     "scikit-learn",
+    "sentence-transformers",
+    "google-genai",
+    "python-dotenv"
 ]
