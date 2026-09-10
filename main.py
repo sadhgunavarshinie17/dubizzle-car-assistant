@@ -412,7 +412,15 @@ def chat(request: ChatRequest):
             save_message(request.user_id, "assistant", final_interaction.output_text)
             return {"response": final_interaction.output_text, "cars": cars}
 
-    save_message(request.user_id, "user", request.message)
-    save_message(request.user_id, "assistant", interaction.output_text)
+    response_text = interaction.output_text
 
-    return {"response": interaction.output_text, "cars": cars}
+    if not response_text:
+        response_text = "I found the relevant information, but I couldn't generate a response. Please try again."
+
+    save_message(request.user_id, "user", request.message)
+    save_message(request.user_id, "assistant", response_text)
+
+    return {
+        "response": response_text,
+        "cars": cars
+    }
